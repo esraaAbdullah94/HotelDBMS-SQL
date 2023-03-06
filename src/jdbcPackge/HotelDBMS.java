@@ -17,41 +17,38 @@ public class HotelDBMS {
 			DriverManager.registerDriver(driver);
 			con = DriverManager.getConnection(url, user, pass);
 			Statement st = con.createStatement();
-			String Hotels = "CREATE TABLE Hotels " + "(id INTEGER NOT NULL PRIMARY KEY, "
-					+ " hotel_name VARCHAR(255) NOT NULL, " + " hotel_location VARCHAR(255),"
-					+ " created_date DATE NOT NULL, " + "  updated_date DATE," + "is_Active Bit NOT NULL)";
+			// Insert 10,000 hotels with user input
+			for (int i = 1; i <= 10000; i++) {
+			    System.out.println("Enter details for hotel " + i + ":");
+			    Scanner scanner = new Scanner(System.in);
 
-			String Room_Type = "CREATE TABLE Room_Type " + "(id INTEGER NOT NULL PRIMARY KEY, "
-					+ "  room_type_name VARCHAR(255) NOT NULL, " + " created_date DATE NOT NULL, "
-					+ "  updated_date DATE," + "is_Active Bit NOT NULL)";
+			    // Get hotel details from user
+			    System.out.print("Enter hotel's name: ");
+			    String hotelName = scanner.next();
+			    System.out.print("Hotel Location: ");
+			    String hotelLocation = scanner.next();
+			    System.out.print("Created Date (yyyy-mm-dd): ");
+			    String createdDate = scanner.next();
+			    System.out.print("Updated Date (yyyy-mm-dd, leave blank for none): ");
+			    String updatedDate = scanner.nextLine();
+			    if (updatedDate.isEmpty()) {
+			        updatedDate = "NULL";
+			    } else {
+			        updatedDate = "'" + updatedDate + "'";
+			    }
+			    System.out.print("Is Active (0 or 1): ");
+			    String isActive = scanner.next();
 
-			String rooms = "CREATE TABLE Rooms(" + "id INTEGER Primary Key, " + "room_type_id INTEGER , "
-					+ "hotel_id INTEGER , " + " FOREIGN KEY (room_type_id) REFERENCES Room_Type(id) ,"
-					+ " FOREIGN KEY (hotel_id) REFERENCES Hotels(id)," + "created_date date, " + "updated_date date, "
-					+ "is_Active Bit not NULL)";
+			    // Create and execute INSERT statement
+			    String insertHotel = "INSERT INTO Hotels (id, hotel_name, hotel_location, created_date, updated_date, is_Active)"
+			    		+ " VALUES (" + i + ", '" + hotelName + "', '" + hotelLocation + "', '" + createdDate + "', " + updatedDate + ", " + isActive + ")";
+			    st.executeUpdate(insertHotel);
 
-			String Guests = "CREATE TABLE Guests(" + "id INTEGER Primary Key, " + " guest_name TEXT not NULL, "
-					+ " guest_phone TEXT not NULL, " + " guest_payment_amount INTEGER not NULL, " + "room_id INTEGER, "
-					+ "hotel_id INTEGER , " + "FOREIGN KEY (room_id) REFERENCES Rooms(id) ,"
-					+ "FOREIGN KEY (hotel_id) REFERENCES Hotels(id) ," + "created_date date, " + "updated_date date, "
-					+ "is_Active Bit not NULL)";
+			    scanner.close();
+			}
 
-			String employeeType = "CREATE TABLE Employee_Type(" + "id INTEGER Primary Key, "
-					+ " employee_type_name TEXT, " + "created_date date, " + "updated_date date, "
-					+ "is_Active Bit not NULL)";
-
-			String Employees = "CREATE TABLE Employees(" + "id INTEGER Primary Key, " + "employee_type_id INTEGER , "
-					+ "room_id INTEGER , " + "FOREIGN KEY (employee_type_id) REFERENCES Employee_Type(id) ,"
-					+ "FOREIGN KEY (room_id) REFERENCES Hotels(id) ," + "created_date date, " + "updated_date date, "
-					+ "is_Active Bit not NULL)";
-
-			st.executeUpdate(Hotels);
-			st.executeUpdate(Room_Type);
-			st.executeUpdate(rooms);
-			st.executeUpdate(Guests);
-			st.executeUpdate(employeeType);
-			st.executeUpdate(Employees);
 			
+
 
 		} catch (Exception ex) {
 			System.err.println(ex);
