@@ -51,6 +51,21 @@ public class HotelDBMS {
 						    st.executeUpdate(insertHotel);
 						}
 
+
+						// Print 10 hotels
+						System.out.println("Printing 10 hotels:");
+						String selectHotels = "SELECT TOP 10 * FROM Hotels";
+						ResultSet rs = st.executeQuery(selectHotels);
+						while (rs.next()) {
+						    int hotelId = rs.getInt("id");
+						    String hotelName = rs.getString("hotel_name");
+						    String hotelLocation = rs.getString("hotel_location");
+						    String createdDate = rs.getString("created_date");
+						    String updatedDate = rs.getString("updated_date");
+						    String isActive = rs.getString("is_Active");
+						    System.out.println("Hotel " + hotelId + ": " + hotelName + " (" + hotelLocation + "), Created: " + createdDate + ", Updated: " + updatedDate + ", Active: " + isActive);
+						}
+
 			
 
 
