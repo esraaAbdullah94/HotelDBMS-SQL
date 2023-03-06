@@ -65,6 +65,28 @@ public class HotelDBMS {
 						    String isActive = rs.getString("is_Active");
 						    System.out.println("Hotel " + hotelId + ": " + hotelName + " (" + hotelLocation + "), Created: " + createdDate + ", Updated: " + updatedDate + ", Active: " + isActive);
 						}
+						
+						// Print 10 hotels where is_Active is false
+						System.out.println("Printing 10 inactive hotels:");
+						String selectInactiveHotels = "SELECT TOP 10 * FROM Hotels WHERE is_Active = 0";
+						ResultSet rs2 = st.executeQuery(selectInactiveHotels);
+						while (rs2.next()) {
+						    int hotelId = rs2.getInt("id");
+						    String hotelName = rs2.getString("hotel_name");
+						    String hotelLocation = rs2.getString("hotel_location");
+						    String createdDate = rs2.getString("created_date");
+						    String updatedDate = rs2.getString("updated_date");
+						    String isActive = rs2.getString("is_Active");
+						    System.out.println("Hotel " + hotelId + ": " + hotelName + " (" + hotelLocation + "), Created: " + createdDate + ", Updated: " + updatedDate + ", Active: " + isActive);
+						}
+
+						// Close resources
+						rs.close();
+						rs2.close();
+						st.close();
+						con.close();
+						scanner.close();
+
 
 			
 
