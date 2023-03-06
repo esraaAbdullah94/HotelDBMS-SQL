@@ -1,6 +1,7 @@
 package jdbcPackge;
 
 import java.sql.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class HotelDBMS {
@@ -18,38 +19,53 @@ public class HotelDBMS {
 			con = DriverManager.getConnection(url, user, pass);
 			Statement st = con.createStatement();
 			// Get user input for number of hotels to add
-						System.out.print("How many hotels do you want to add? ");
-						Scanner scanner = new Scanner(System.in);
-						int numHotels = scanner.nextInt();
+			System.out.print("How many hotels do you want to add? ");
+			Scanner scanner = new Scanner(System.in);
+			int numHotels = 0;
 
-						// Loop through each hotel and get details from user
-						for (int i = 1; i <= numHotels; i++) {
-						    System.out.println("Enter details for hotel " + i + ":");
+			// Loop until user enters a valid number
+			while (true) {
+			    try {
+			        numHotels = scanner.nextInt();
+			        if (numHotels > 10000) {
+			            System.out.println("You cannot add more than 10,000 hotels.");
+			            continue;
+			        }
+			        break;
+			    } catch (InputMismatchException e) {
+			        System.out.println("Please enter a valid number.");
+			        scanner.nextLine();
+			    }
+			}
 
-						    // Get hotel details from user
-						    System.out.print("Enter hotel's id: ");
-						    int hotelId = scanner.nextInt();
-						    System.out.print("Enter hotel's name: ");
-						    String hotelName = scanner.next();
-						    System.out.print("Hotel Location: ");
-						    String hotelLocation = scanner.next();
-						    System.out.print("Created Date (yyyy-mm-dd): ");
-						    String createdDate = scanner.next();
-						    System.out.print("Updated Date (yyyy-mm-dd, leave blank for none): ");
-						    String updatedDate = scanner.nextLine();
-						    if (updatedDate.isEmpty()) {
-						        updatedDate = "NULL";
-						    } else {
-						        updatedDate = "'" + updatedDate + "'";
-						    }
-						    System.out.print("Is Active (0 or 1): ");
-						    String isActive = scanner.next();
+			// Loop through each hotel and get details from user
+			for (int i = 1; i <= numHotels; i++) {
+			    System.out.println("Enter details for hotel " + i + ":");
 
-						    // Create and execute INSERT statement
-						    String insertHotel = "INSERT INTO Hotels (id, hotel_name, hotel_location, created_date, updated_date, is_Active)"
-						            + " VALUES (" + hotelId + ", '" + hotelName + "', '" + hotelLocation + "', '" + createdDate + "', " + updatedDate + ", " + isActive + ")";
-						    st.executeUpdate(insertHotel);
-						}
+			    // Get hotel details from user
+			    System.out.print("Enter hotel's id: ");
+			    int hotelId = scanner.nextInt();
+			    System.out.print("Enter hotel's name: ");
+			    String hotelName = scanner.next();
+			    System.out.print("Hotel Location: ");
+			    String hotelLocation = scanner.next();
+			    System.out.print("Created Date (yyyy-mm-dd): ");
+			    String createdDate = scanner.next();
+			    System.out.print("Updated Date (yyyy-mm-dd, leave blank for none): ");
+			    String updatedDate = scanner.nextLine();
+			    if (updatedDate.isEmpty()) {
+			        updatedDate = "NULL";
+			    } else {
+			        updatedDate = "'" + updatedDate + "'";
+			    }
+			    System.out.print("Is Active (0 or 1): ");
+			    String isActive = scanner.next();
+
+			    // Create and execute INSERT statement
+			    String insertHotel = "INSERT INTO Hotels (id, hotel_name, hotel_location, created_date, updated_date, is_Active)"
+			            + " VALUES (" + hotelId + ", '" + hotelName + "', '" + hotelLocation + "', '" + createdDate + "', " + updatedDate + ", " + isActive + ")";
+			    st.executeUpdate(insertHotel);
+			}
 
 
 						// Print 10 hotels
